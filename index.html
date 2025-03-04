@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Answer Formatter</title>
+</head>
+
+<body>
+
+  <style>
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      margin: 0px;
+      padding-bottom: 10px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .required::after {
+      content: "*";
+      color: red;
+      margin-left: 4px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #output {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      white-space: pre-wrap;
+      min-height: 85%;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* Add media query for mobile responsiveness */
+    @media screen and (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+        /* Change to single column */
+      }
+
+      .container {
+        padding: 10px;
+        /* Reduce padding for mobile */
+      }
+
+      .output-section {
+        padding: 10px;
+        /* Reduce padding for mobile */
+      }
+    }
+
+    .output-section {
+      padding: 0px 20px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .clear-button {
+      background-color: #f44336;
+    }
+
+    .clear-button:hover {
+      background-color: #d32f2f;
+    }
+
+    .copy-button {
+      background-color: #2196F3;
+    }
+
+    .copy-button:hover {
+      background-color: #1976D2;
+    }
+
+    .copy-notification {
+      margin-top: 10px;
+      color: #4CAF50;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .copy-notification.show {
+      opacity: 1;
+    }
+  </style>
+
+  <div class="container">
+    <h1>Answer Formatter</h1>
+    <div class="grid-container">
+      <div class="form-section">
+        <h2>Question Builder</h2>
+
+        <form id="questionForm">
+          <div class="form-group">
+            <label class="required">Question</label>
+            <textarea id="question" rows="10" cols="50" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="required">Option A (Must be the correct answer)</label>
+            <input type="text" id="choiceA" required>
+          </div>
+
+          <div class="form-group">
+            <label class="required">Option B</label>
+            <input type="text" id="choiceB" required>
+          </div>
+
+          <div class="form-group">
+            <label class="required">Option C</label>
+            <input type="text" id="choiceC" required>
+          </div>
+
+          <div class="form-group">
+            <label class="required">Option D</label>
+            <input type="text" id="choiceD" required>
+          </div>
+
+          <div class="form-group">
+            <label>Option E (Optional)</label>
+            <input type="text" id="choiceE">
+          </div>
+
+          <div class="form-group">
+            <label class="required">Explanations</label>
+            <textarea id="explanation" rows="20" required></textarea>
+          </div>
+
+          <div class="button-group">
+            <button type="submit">Generate Output</button>
+            <button type="button" class="clear-button" id="clearForm">Clear All</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="output-section">
+        <h2>Formatted Output</h2>
+        <div id="output"></div>
+        <button class="copy-button" id="copyOutput" style="display: none;">Copy to Clipboard</button>
+        <div id="copyNotification" class="copy-notification">Copied to clipboard!</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('questionForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Get all values
+      const question = document.getElementById('question').value.trim();
+      const choices = [
+        document.getElementById('choiceA').value.trim(),
+        document.getElementById('choiceB').value.trim(),
+        document.getElementById('choiceC').value.trim(),
+        document.getElementById('choiceD').value.trim(),
+        document.getElementById('choiceE').value.trim()
+      ].filter(choice => choice !== '');
+
+      const explanation = document.getElementById('explanation').value.trim();
+
+      // Validation
+      if (!question || choices.length < 4 || !explanation) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      // Format the output using letters instead of numbers
+      const formattedOutput = `${question}\n\n---\n\n${choices.map((choice, index) => `<${String.fromCharCode(65 + index)}> ${choice} </${String.fromCharCode(65 + index)}>`).join('\n')}\n\n---\n\n${explanation}`;
+
+      // Display output
+      const outputDiv = document.getElementById('output');
+      const copyButton = document.getElementById('copyOutput');
+      outputDiv.textContent = formattedOutput;
+      copyButton.style.display = 'block';
+    });
+
+    document.getElementById('clearForm').addEventListener('click', function () {
+      document.getElementById('questionForm').reset();
+      document.getElementById('output').textContent = '';
+      document.getElementById('copyOutput').style.display = 'none';
+    });
+
+    document.getElementById('copyOutput').addEventListener('click', function () {
+      const outputText = document.getElementById('output').textContent;
+      const notification = document.getElementById('copyNotification');
+
+      navigator.clipboard.writeText(outputText)
+        .then(() => {
+          notification.classList.add('show');
+          setTimeout(() => {
+            notification.classList.remove('show');
+          }, 2000); // Hide after 2 seconds
+        })
+        .catch(err => console.error('Failed to copy: ', err));
+    });
+  </script>
+
+
+</body>
+
+</html>
