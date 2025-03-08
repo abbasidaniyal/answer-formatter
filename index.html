@@ -11,10 +11,12 @@
 
   <style>
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 20px;
       font-family: Arial, sans-serif;
+      zoom: 0.9;
+      -moz-transform: scale(0.9);
     }
 
     .form-group {
@@ -145,37 +147,61 @@
         <form id="questionForm">
           <div class="form-group">
             <label class="required">Question</label>
-            <textarea id="question" rows="10" cols="50" required></textarea>
+            <textarea id="question" rows="10" cols="50" required 
+              placeholder="- Clearly state the question, covering a key concept, fact, or example
+- Test for comprehension, not recognition
+- Ensure there is one clear, correct answer
+- Cite sources explicitly
+
+Example:
+According to Han et al., page 33...
+Or
+According to lecture, day 5..."></textarea>
           </div>
 
           <div class="form-group">
             <label class="required">Option A (Must be the correct answer)</label>
-            <input type="text" id="choiceA" required>
+            <input type="text" id="choiceA" required placeholder="Correct answer - aim for similar length to other options">
           </div>
 
           <div class="form-group">
             <label class="required">Option B</label>
-            <input type="text" id="choiceB" required>
+            <input type="text" id="choiceB" required placeholder="Incorrect but plausible answer - keep length similar to option A">
           </div>
 
           <div class="form-group">
             <label class="required">Option C</label>
-            <input type="text" id="choiceC" required>
+            <input type="text" id="choiceC" required placeholder="Another incorrect option - maintain consistent length">
           </div>
 
           <div class="form-group">
             <label class="required">Option D</label>
-            <input type="text" id="choiceD" required>
+            <input type="text" id="choiceD" required placeholder="Another incorrect option - keep similar length to others">
           </div>
 
           <div class="form-group">
             <label>Option E (Optional)</label>
-            <input type="text" id="choiceE">
+            <input type="text" id="choiceE" placeholder="Optional - if used can be hilariously wrong - maintain similar length to other options">
           </div>
 
           <div class="form-group">
             <label class="required">Explanations</label>
-            <textarea id="explanation" rows="20" required></textarea>
+            <textarea id="explanation" rows="20" required placeholder="Provide a thorough explanation that:
+
+1. Justifies why the correct answer (A) is correct
+2. Explains why each incorrect option (B, C, D, E) is wrong
+
+Common types of incorrect answers to explain:
+- A dismissed argument from the author
+- A claim opposite to the author's argument
+- A statement from another author on a related topic
+- A true but irrelevant statement from the reading
+- An example from lecture describing a different concept
+
+Remember:
+- Each answer choice must be unique
+- There must be only one correct answer
+- Avoid using 'All of the above' or 'None of the above'"></textarea>
           </div>
 
           <div class="button-group">
@@ -190,6 +216,9 @@
         <div id="output"></div>
         <button class="copy-button" id="copyOutput" style="display: none;">Copy to Clipboard</button>
         <div id="copyNotification" class="copy-notification">Copied to clipboard!</div>
+        <div style="margin-top: 20px; color: #d32f2f; font-style: italic;">
+          ⚠️ Remember: When posting to Canvas, make sure to attach all referenced images and files!
+        </div>
       </div>
     </div>
   </div>
